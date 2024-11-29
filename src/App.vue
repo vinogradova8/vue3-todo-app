@@ -127,7 +127,7 @@
             class="filter__link selected"
             data-cy="FilterLinkAll"
           >
-            All
+            
           </a>
 
           <a
