@@ -118,7 +118,7 @@
 
       <footer class="todoapp__footer" data-cy="Footer">
         <span class="todo-count" data-cy="TodosCounter">
-          
+          3 items left
         </span>
 
         <nav class="filter" data-cy="Filter">
@@ -127,7 +127,7 @@
             class="filter__link selected"
             data-cy="FilterLinkAll"
           >
-            
+            All
           </a>
 
           <a
