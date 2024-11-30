@@ -157,7 +157,7 @@
       </footer>
     </div>
 
-    <div
+    <!-- <div
       data-cy="ErrorNotification"
       class="notification is-danger is-light has-text-weight-normal"
     >
@@ -171,6 +171,6 @@
       Unable to delete a todo
       <br />
       Unable to update a todo
-    </div>
+    </div> -->
   </div>
 </template>
