@@ -1,3 +1,25 @@
+<script>
+import todos from './components/data/todos';
+
+export default {
+  data() {
+    return {
+      todos,
+    };
+  },
+
+  computed: {
+    activeTodos() {
+      return this.todos.filter((todo) => !todo.completed);
+    },
+
+    completedTodos() {
+      return this.todos.filter((todo) => todo.completed);
+    },
+  },
+};
+</script>
+
 <template>
   <div class="todoapp">
     <h1 class="todoapp__title">todos</h1>
@@ -6,7 +28,8 @@
       <header class="todoapp__header">
         <button
           type="button"
-          class="todoapp__toggle-all active"
+          class="todoapp__toggle-all"
+          :class="{ active: activeTodos.length === 0 }"
           data-cy="ToggleAllButton"
         />
 
@@ -21,62 +44,23 @@
       </header>
 
       <section class="todoapp__main" data-cy="TodoList">
-        <div data-cy="Todo" class="todo completed">
+        <div
+          v-for="(todo, index) of todos"
+          :key="todo.id"
+          data-cy="Todo"
+          class="todo"
+          :class="{ completed: todo.completed }"
+        >
           <label class="todo__status-label">
             <input
               data-cy="TodoStatus"
               type="checkbox"
-              class="todo__status"
-              checked
-            />
-          </label>
-
-          <span data-cy="TodoTitle" class="todo__title">
-            Completed Todo
-          </span>
-
-          <button type="button" class="todo__remove" data-cy="TodoDelete">
-            ×
-          </button>
-
-          <div data-cy="TodoLoader" class="modal overlay">
-            <div class="modal-background has-background-white-ter" />
-            <div class="loader" />
-          </div>
-        </div>
-
-        <div data-cy="Todo" class="todo">
-          <label class="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
+              v-model="todo.completed"
               class="todo__status"
             />
           </label>
 
-          <span data-cy="TodoTitle" class="todo__title">
-            Not Completed Todo
-          </span>
-          <button type="button" class="todo__remove" data-cy="TodoDelete">
-            ×
-          </button>
-
-          <div data-cy="TodoLoader" class="modal overlay">
-            <div class="modal-background has-background-white-ter" />
-            <div class="loader" />
-          </div>
-        </div>
-
-        <div data-cy="Todo" class="todo">
-          <label class="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              class="todo__status"
-            />
-          </label>
-
-          <form>
+          <form v-if="false">
             <input
               data-cy="TodoTitleField"
               type="text"
@@ -86,30 +70,26 @@
             />
           </form>
 
-          <div data-cy="TodoLoader" class="modal overlay">
-            <div class="modal-background has-background-white-ter" />
-            <div class="loader" />
-          </div>
-        </div>
+          <template v-else>
+            <span data-cy="TodoTitle" class="todo__title">
+              {{ todo.title }}
+            </span>
 
-        <div data-cy="Todo" class="todo">
-          <label class="todo__status-label">
-            <input
-              data-cy="TodoStatus"
-              type="checkbox"
-              class="todo__status"
-            />
-          </label>
+            <button
+              type="button"
+              class="todo__remove"
+              data-cy="TodoDelete"
+              @click="todos.splice(index, 1)"
+            >
+              ×
+            </button>
+          </template>
 
-          <span data-cy="TodoTitle" class="todo__title">
-            Todo is being saved now
-          </span>
-
-          <button type="button" class="todo__remove" data-cy="TodoDelete">
-            ×
-          </button>
-
-          <div data-cy="TodoLoader" class="modal overlay is-active">
+          <div
+            data-cy="TodoLoader"
+            class="modal overlay"
+            :class="{ 'is-active': false }"
+          >
             <div class="modal-background has-background-white-ter" />
             <div class="loader" />
           </div>
@@ -118,23 +98,15 @@
 
       <footer class="todoapp__footer" data-cy="Footer">
         <span class="todo-count" data-cy="TodosCounter">
-          3 items left
+          {{ activeTodos.length }} items left
         </span>
 
         <nav class="filter" data-cy="Filter">
-          <a
-            href="#/"
-            class="filter__link selected"
-            data-cy="FilterLinkAll"
-          >
+          <a href="#/" class="filter__link selected" data-cy="FilterLinkAll">
             All
           </a>
 
-          <a
-            href="#/active"
-            class="filter__link"
-            data-cy="FilterLinkActive"
-          >
+          <a href="#/active" class="filter__link" data-cy="FilterLinkActive">
             Active
           </a>
 
@@ -151,6 +123,7 @@
           type="button"
           class="todoapp__clear-completed"
           data-cy="ClearCompletedButton"
+          v-if="completedTodos.length > 0"
         >
           Clear completed
         </button>
