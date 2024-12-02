@@ -1,10 +1,12 @@
 <script>
+import { title } from 'process';
 import todos from './components/data/todos';
 
 export default {
   data() {
     return {
       todos,
+      title: '',
     };
   },
 
@@ -16,6 +18,10 @@ export default {
     completedTodos() {
       return this.todos.filter((todo) => todo.completed);
     },
+  },
+
+  methods: {
+    handleSubmit() {},
   },
 };
 </script>
@@ -33,12 +39,13 @@ export default {
           data-cy="ToggleAllButton"
         />
 
-        <form>
+        <form @submit.prevent="handleSubmit">
           <input
             data-cy="NewTodoField"
             type="text"
             class="todoapp__new-todo"
             placeholder="What needs to be done?"
+            v-model="title"
           />
         </form>
       </header>
