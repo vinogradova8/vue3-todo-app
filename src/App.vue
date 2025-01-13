@@ -1,12 +1,25 @@
 <script>
-import { title } from 'process';
-import todos from './components/data/todos';
+// import { title } from 'process';
+import todos from './data/todos';
+import StatusFilter from './components/StatusFilter.vue';
 
 export default {
+  components: {
+    StatusFilter,
+  },
+
   data() {
+    let todos = [];
+    const jsonData = localStorage.getItem('todos') || '[]';
+
+    try {
+      todos = JSON.parse(jsonData);
+    } catch (e) {}
+
     return {
       todos,
       title: '',
+      status: 'all',
     };
   },
 
@@ -20,8 +33,25 @@ export default {
     },
   },
 
+  watch: {
+    todos: {
+      deep: true,
+      handler() {
+        localStorage.setItem('todos', JSON.stringify(this.todos));
+      },
+    },
+  },
+
   methods: {
-    handleSubmit() {},
+    handleSubmit() {
+      this.todos.push({
+        id: Date.now(),
+        title: this.title,
+        completed: false,
+      });
+
+      this.title = '';
+    },
   },
 };
 </script>
@@ -108,23 +138,7 @@ export default {
           {{ activeTodos.length }} items left
         </span>
 
-        <nav class="filter" data-cy="Filter">
-          <a href="#/" class="filter__link selected" data-cy="FilterLinkAll">
-            All
-          </a>
-
-          <a href="#/active" class="filter__link" data-cy="FilterLinkActive">
-            Active
-          </a>
-
-          <a
-            href="#/completed"
-            class="filter__link"
-            data-cy="FilterLinkCompleted"
-          >
-            Completed
-          </a>
-        </nav>
+        <StatusFilter v-model="status" />
 
         <button
           type="button"

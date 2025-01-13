@@ -1,6 +1,6 @@
-@import "./todoapp";
-@import "./todo";
-@import "./filter";
+@use "./todoapp";
+@use "./todo";
+@use "./filter";
 
 iframe {
   display: none;
